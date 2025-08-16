@@ -489,9 +489,10 @@ import * as pdfjsLib from 'pdfjs-dist'
 import { EventBus, PDFLinkService, PDFFindController, PDFViewer } from 'pdfjs-dist/web/pdf_viewer'
 import 'pdfjs-dist/web/pdf_viewer.css'
 
-// Worker (Vite): usar asset como url
-import workerSrc from 'pdfjs-dist/build/pdf.worker.min.mjs?url'
-pdfjsLib.GlobalWorkerOptions.workerSrc = workerSrc
+
+// Worker (Vite): usar como Web Worker
+import PDFWorker from 'pdfjs-dist/build/pdf.worker.mjs?worker'
+pdfjsLib.GlobalWorkerOptions.workerPort = new PDFWorker()
 
 const pdfHost = ref(null)
 const viewerEl = ref(null)
