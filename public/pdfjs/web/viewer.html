@@ -1,0 +1,90 @@
+
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <title>PDF Viewer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="./pdf_viewer.css">
+  <style>
+    html,body { margin:0; padding:0; height:100%; background:#121212; color:#eee; }
+    .viewerContainer { position:fixed; inset:0; overflow:auto; }
+    .pdfViewer .page { margin:12px auto; box-shadow:0 2px 12px rgba(0,0,0,.3); background:#fff; }
+  </style>
+</head>
+<body>
+  <!-- PADRE con class viewerContainer + HIJO con class pdfViewer -->
+  <div id="viewerContainer" class="viewerContainer">
+    <div id="viewer" class="pdfViewer"></div>
+  </div>
+
+  <script src="../build/pdf.js"></script>
+  <script src="./pdf_viewer.js"></script>
+  <script>
+    pdfjsLib.GlobalWorkerOptions.workerSrc = '../build/pdf.worker.js';
+
+    const container = document.getElementById('viewerContainer');
+    const viewerEl  = document.getElementById('viewer');
+
+    const eventBus       = new pdfjsViewer.EventBus();
+    const linkService    = new pdfjsViewer.PDFLinkService({ eventBus });
+    const findController = new pdfjsViewer.PDFFindController({ eventBus, linkService });
+
+    // IMPORTANTE: pasar "viewer"
+    const viewer = new pdfjsViewer.PDFViewer({
+      container,
+      viewer: viewerEl,
+      eventBus,
+      linkService,
+      findController,
+      textLayerMode: 1,
+      removePageBorders: false
+    });
+    linkService.setViewer(viewer);
+
+    window.PDFViewerApplication = { pdfViewer: viewer, eventBus, pdfLinkService: linkService, pdfDocument: null };
+
+    const u = new URL(location.href);
+    const file  = u.searchParams.get('file') || '';
+    const hash  = new URLSearchParams(location.hash.slice(1));
+    const page  = parseInt(hash.get('page') || '0', 10);
+    const zoom  = hash.get('zoom');
+    const query = u.searchParams.get('search') || hash.get('search');
+
+    if (!file) {
+      viewer.currentScaleValue = 'page-width';
+    } else {
+      pdfjsLib.getDocument({ url: decodeURIComponent(file) }).promise.then(pdfDoc => {
+        window.PDFViewerApplication.pdfDocument = pdfDoc;
+        viewer.setDocument(pdfDoc);
+        linkService.setDocument(pdfDoc, null);
+
+        if (zoom) {
+          if (/^\d+$/.test(zoom)) viewer.currentScale = parseInt(zoom, 10) / 100;
+          else viewer.currentScaleValue = zoom;
+        } else {
+          viewer.currentScaleValue = 'page-width';
+        }
+        if (page) viewer.currentPageNumber = page;
+
+        if (query) {
+          eventBus.dispatch('find', {
+            source: window.PDFViewerApplication,
+            type: 'find',
+            query,
+            caseSensitive: false,
+            entireWord: false,
+            phraseSearch: true,
+            highlightAll: true,
+            findPrevious: false
+          });
+        }
+      }).catch(err => {
+        console.error('[viewer] Error cargando PDF:', err);
+        document.body.insertAdjacentHTML('beforeend',
+          '<div style="position:fixed;inset:0;display:grid;place-items:center;color:#f88">No pude abrir el PDF</div>');
+      });
+    }
+  </script>
+</body>
+</html>
