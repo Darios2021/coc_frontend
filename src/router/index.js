@@ -29,7 +29,7 @@ async function ensureAuthOnce() {
   bootstrapped = true
   try {
     // Debe ser POST y con credenciales (cookies HttpOnly)
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/auth/refresh`, {
+    const res = await fetch(`${import.meta.env.VITE_API_BASE}/auth/refresh`, {
       method: 'POST',
       credentials: 'include'
     })
