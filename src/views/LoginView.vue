@@ -165,7 +165,7 @@ async function onSubmit () {
 
     // Si ok, el backend setea cookie HttpOnly con el JWT de acceso
     // Podés redirigir al dashboard
-    router.push('/dashboard')
+   router.push({ name: 'docs' })
   } catch (e) {
     errorMsg.value = e.message || 'Falla de autenticación'
   } finally {
