@@ -99,7 +99,7 @@ import { useRouter } from 'vue-router'
 const router = useRouter()
 
 // CONFIG (podés pasar esto por props o env)
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3001'
+const API_BASE = import.meta.env.VITE_API_BASE || 'http://localhost:3001'
 const logoSrc = import.meta.env.VITE_COC_LOGO || '' // ruta al logo
 const captchaSiteKey = import.meta.env.VITE_HCAPTCHA_SITEKEY || ''
 
