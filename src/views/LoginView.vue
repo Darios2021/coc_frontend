@@ -134,7 +134,8 @@ async function onSubmit () {
 
   loading.value = true
   try {
-    // Paso 1: intento de login
+    console.log('🚀 Enviando solicitud de login...')
+
     const res = await fetch(`${API_BASE}/auth/login`, {
       method: 'POST',
       credentials: 'include', // para cookies HttpOnly
@@ -147,6 +148,37 @@ async function onSubmit () {
         captchaToken: '' // integrar si activás hCaptcha/reCAPTCHA
       }),
     })
+
+    console.log('📩 Respuesta recibida con status:', res.status)
+
+    if (res.status === 401) {
+      const data = await res.json().catch(() => ({}))
+      console.log('❌ Login 401:', data)
+      if (data?.reason === 'TOTP_REQUIRED') {
+        needsTOTP.value = true
+        errorMsg.value = 'Ingresá el código 2FA de tu app (Google Authenticator, etc.)'
+        return
+      }
+      throw new Error(data?.message || 'Credenciales inválidas')
+    }
+
+    if (!res.ok) {
+      const txt = await res.text()
+      console.log('⚠️ Error inesperado:', txt)
+      throw new Error(txt || 'Error de autenticación')
+    }
+
+    // Si todo OK, el backend setea cookie HttpOnly
+    console.log('✅ Login exitoso, redirigiendo a /docs...')
+    router.push({ name: 'docs' }) // o forzá con: window.location.href = '/docs'
+
+  } catch (e) {
+    console.error('🔥 Error en login:', e)
+    errorMsg.value = e.message || 'Falla de autenticación'
+  } finally {
+    loading.value = false
+  }
+}
 
     if (res.status === 401) {
       const data = await res.json().catch(() => ({}))
