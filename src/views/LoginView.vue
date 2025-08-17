@@ -180,31 +180,6 @@ async function onSubmit () {
   }
 }
 
-    if (res.status === 401) {
-      const data = await res.json().catch(() => ({}))
-      if (data?.reason === 'TOTP_REQUIRED') {
-        needsTOTP.value = true
-        errorMsg.value = 'Ingresá el código 2FA de tu app (Google Authenticator, etc.)'
-        return
-      }
-      throw new Error(data?.message || 'Credenciales inválidas')
-    }
-
-    if (!res.ok) {
-      const txt = await res.text()
-      throw new Error(txt || 'Error de autenticación')
-    }
-
-    // Si ok, el backend setea cookie HttpOnly con el JWT de acceso
-    // Podés redirigir al dashboard
-   router.push({ name: 'docs' })
-  } catch (e) {
-    errorMsg.value = e.message || 'Falla de autenticación'
-  } finally {
-    loading.value = false
-  }
-}
-
 function onForgot () {
   router.push({ name: 'forgot-password' })
 }
