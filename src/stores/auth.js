@@ -24,9 +24,14 @@ export const useAuthStore = defineStore('auth', {
       }
     },
     async logout() {
-      try { await api.post('/auth/logout') } catch {}
-      this.isAuth = false
-    },
+  try {
+    await api.post('/auth/logout')
+    console.log('✅ Logout backend exitoso')
+  } catch (err) {
+    console.warn('⚠️ Error durante logout:', err)
+  }
+  this.isAuth = false
+},
     async ensureAuth() {
       try {
         await api.post('/auth/refresh')

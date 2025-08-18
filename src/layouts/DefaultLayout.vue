@@ -14,7 +14,7 @@
         </template>
 
         <v-list>
-          <v-list-item @click="logout" link>
+          <v-list-item @click="handleLogout" link>
             <v-list-item-icon><v-icon>mdi-logout</v-icon></v-list-item-icon>
             <v-list-item-title>Cerrar sesión</v-list-item-title>
           </v-list-item>
@@ -43,23 +43,14 @@
 
 <script setup>
 import { useRouter } from 'vue-router'
+import { useAuthStore } from '@/stores/authjs'
 
 const router = useRouter()
+const authStore = useAuthStore()
 
-function logout() {
-  console.log('Cerrando sesión...')
-
-  // Borramos todas las cookies relacionadas (solo si se usó auth con cookies)
-  document.cookie = 'jwt=; Max-Age=0; path=/;'
-
-  // Limpiamos almacenamiento local
-  localStorage.clear()
-  sessionStorage.clear()
-
-  // Forzamos redirección dura
-  window.location.href = '/login'
+async function handleLogout() {
+  console.log('🔒 Cerrando sesión...')
+  await authStore.logout()
+  router.push({ name: 'login' })
 }
-
-
-
 </script>
