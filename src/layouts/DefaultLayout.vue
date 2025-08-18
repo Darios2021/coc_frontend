@@ -5,16 +5,15 @@
       <v-toolbar-title>Centro de Operaciones Capital</v-toolbar-title>
       <v-spacer />
 
-      <!-- Botón de logout dentro de un menú desplegable -->
+      <!-- Botón logout en menú -->
       <v-menu offset-y>
         <template #activator="{ props }">
           <v-btn icon v-bind="props">
             <v-icon>mdi-account-circle</v-icon>
           </v-btn>
         </template>
-
         <v-list>
-          <v-list-item @click="logout" link>
+          <v-list-item @click="handleLogout" link>
             <v-list-item-icon><v-icon>mdi-logout</v-icon></v-list-item-icon>
             <v-list-item-title>Cerrar sesión</v-list-item-title>
           </v-list-item>
@@ -32,7 +31,7 @@
       </v-list>
     </v-navigation-drawer>
 
-    <!-- Contenido principal -->
+    <!-- Contenido -->
     <v-main>
       <v-container fluid>
         <router-view />
@@ -42,24 +41,14 @@
 </template>
 
 <script setup>
+import { useAuthStore } from '@/stores/auth'
 import { useRouter } from 'vue-router'
 
+const auth = useAuthStore()
 const router = useRouter()
 
-function logout() {
-  console.log('Cerrando sesión...')
-
-  // Borramos todas las cookies relacionadas (solo si se usó auth con cookies)
-  document.cookie = 'jwt=; Max-Age=0; path=/;'
-
-  // Limpiamos almacenamiento local
-  localStorage.clear()
-  sessionStorage.clear()
-
-  // Forzamos redirección dura
-  window.location.href = '/login'
+async function handleLogout() {
+  await auth.logout()
+  router.push('/login')
 }
-
-
-
 </script>
