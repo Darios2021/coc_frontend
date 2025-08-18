@@ -1,6 +1,5 @@
 <template>
   <v-app>
-    <SessionExpireDialog />
 
     <!-- App Bar -->
     <v-app-bar app color="primary" dark>
@@ -57,7 +56,6 @@
 import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useTheme } from 'vuetify'
-import SessionExpireDialog from '@/views/SessionExpireDialog.vue'
 
 // Sidebar toggle
 const drawer = ref(false)
