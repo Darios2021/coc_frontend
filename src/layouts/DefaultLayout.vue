@@ -1,37 +1,35 @@
 <template>
   <v-app>
-    <!-- APP BAR -->
+    <!-- Barra superior -->
     <v-app-bar app color="primary" dark>
       <v-toolbar-title>Centro de Operaciones Capital</v-toolbar-title>
       <v-spacer />
-
-      <!-- Botón Cerrar Sesión -->
-      <v-menu offset-y>
-        <template #activator="{ props }">
-          <v-btn icon v-bind="props">
-            <v-icon>mdi-account-circle</v-icon>
-          </v-btn>
-        </template>
-        <v-list dense>
-          <v-list-item @click="logout">
-            <v-icon left>mdi-logout</v-icon>
-            <v-list-item-title>Cerrar Sesión</v-list-item-title>
-          </v-list-item>
-        </v-list>
-      </v-menu>
+      <v-btn icon @click="logout" title="Cerrar sesión">
+        <v-icon>mdi-logout</v-icon>
+      </v-btn>
     </v-app-bar>
 
-    <!-- SIDEBAR -->
-    <v-navigation-drawer app v-model="drawer" permanent>
+    <!-- Menú lateral -->
+    <v-navigation-drawer app permanent>
       <v-list dense nav>
         <v-list-item to="/docs" router exact>
           <v-icon left>mdi-file-document</v-icon>
           <v-list-item-title>Documentos</v-list-item-title>
         </v-list-item>
+        <!-- Agregá más ítems si querés -->
       </v-list>
-    </v-navigation-drawer>
+      <v-list-item to="/perfil" router>
+      <v-icon left>mdi-account</v-icon>
+      <v-list-item-title>Perfil</v-list-item-title>
+      </v-list-item>
 
-    <!-- CONTENIDO -->
+      <v-list-item to="/reportes" router>
+      <v-icon left>mdi-chart-box</v-icon>
+      <v-list-item-title>Reportes</v-list-item-title>
+      </v-list-item>
+     </v-navigation-drawer>
+
+    <!-- Contenido principal -->
     <v-main>
       <v-container fluid>
         <router-view />
@@ -41,11 +39,8 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-
 const router = useRouter()
-const drawer = ref(true)
 
 function logout() {
   localStorage.clear()
