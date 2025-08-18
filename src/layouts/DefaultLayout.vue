@@ -49,6 +49,6 @@ const router = useRouter()
 function logout() {
   console.log('Cerrando sesión...')
   localStorage.clear()
-  router.push('/login')
+ router.push({ name: 'login' })
 }
 </script>
