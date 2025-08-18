@@ -1,6 +1,6 @@
 <template>
   <v-app :dark="isDark" class="px-6 py-3 rounded" elevation="6" :light="!isDark">
-    <SessionExpireDialog />
+    
 
     <v-app-bar app :dark="isDark" :light="!isDark" color="primary" elevation="5">
       <v-toolbar-title>COC · Centro de Operaciones Capital</v-toolbar-title>
@@ -111,7 +111,6 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
-import SessionExpireDialog from '@/views/SessionExpireDialog.vue'
 import { useTheme } from 'vuetify'
 
 // router y estado
