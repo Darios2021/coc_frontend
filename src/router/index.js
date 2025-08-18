@@ -33,22 +33,24 @@ const router = createRouter({
 
 // ===== Auth bootstrap =====
 let bootstrapped = false
-let isAuthenticated = false
 
 async function ensureAuthOnce() {
-  if (bootstrapped) return isAuthenticated
+  if (bootstrapped) return localStorage.getItem('auth') === '1'
   bootstrapped = true
   try {
     const res = await fetch(`${import.meta.env.VITE_API_BASE}/auth/refresh`, {
       method: 'POST',
       credentials: 'include'
     })
-    isAuthenticated = res.ok
+    const ok = res.ok
+    localStorage.setItem('auth', ok ? '1' : '0')
+    return ok
   } catch {
-    isAuthenticated = false
+    localStorage.setItem('auth', '0')
+    return false
   }
-  return isAuthenticated
 }
+
 
 // Guard global
 router.beforeEach(async (to) => {
