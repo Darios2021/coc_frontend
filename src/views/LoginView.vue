@@ -94,7 +94,8 @@
 
 <script setup>
 import { ref, computed } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
+
 
 const router = useRouter()
 
@@ -168,9 +169,15 @@ async function onSubmit () {
       throw new Error(txt || 'Error de autenticación')
     }
 
-    // Si todo OK, el backend setea cookie HttpOnly
-    console.log('✅ Login exitoso, redirigiendo a /docs...')
-    router.push({ name: 'docs' }) // o forzá con: window.location.href = '/docs'
+    // 🟢 Login exitoso
+    console.log('✅ Login exitoso')
+
+    const current = router.currentRoute?.value
+    const redirectTo = current?.query?.redirect || '/docs'
+    console.log('🔁 Redireccionando a:', redirectTo)
+
+    // Redirigir forzando recarga completa para evitar inconsistencias si hay layouts o cache
+    window.location.href = redirectTo
 
   } catch (e) {
     console.error('🔥 Error en login:', e)
@@ -179,6 +186,7 @@ async function onSubmit () {
     loading.value = false
   }
 }
+
 
 function onForgot () {
   router.push({ name: 'forgot-password' })
