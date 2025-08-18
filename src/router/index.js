@@ -1,5 +1,5 @@
+// src/router/index.js
 import { createRouter, createWebHistory } from 'vue-router'
-import { useAuthStore } from '@/stores/auth'
 
 // Lazy views
 const Login    = () => import('../views/LoginView.vue')
@@ -13,6 +13,7 @@ import DefaultLayout from '../layouts/DefaultLayout.vue'
 const routes = [
   { path: '/', redirect: '/docs' },
   { path: '/login', name: 'login', component: Login, meta: { public: true } },
+
   {
     path: '/',
     component: DefaultLayout,
@@ -30,17 +31,39 @@ const router = createRouter({
   routes,
 })
 
+// ===== Auth bootstrap =====
+let bootstrapped = false
+
+async function ensureAuthOnce() {
+  if (bootstrapped) return localStorage.getItem('auth') === '1'
+  bootstrapped = true
+  try {
+    const res = await fetch(`${import.meta.env.VITE_API_BASE}/auth/refresh`, {
+      method: 'POST',
+      credentials: 'include'
+    })
+    const ok = res.ok
+    localStorage.setItem('auth', ok ? '1' : '0')
+    return ok
+  } catch {
+    localStorage.setItem('auth', '0')
+    return false
+  }
+}
+
+
 // Guard global
 router.beforeEach(async (to) => {
-  const auth = useAuthStore()
-  await auth.ensureAuth()
+  const isAuthenticated = await ensureAuthOnce()
 
-  if (to.meta?.requiresAuth && !auth.isAuth) {
+  if (to.meta?.requiresAuth && !isAuthenticated) {
     return { name: 'login', query: { redirect: to.fullPath } }
   }
-  if (to.name === 'login' && auth.isAuth) {
+
+  if (to.name === 'login' && isAuthenticated) {
     return { name: 'docs' }
   }
 })
+
 
 export default router
