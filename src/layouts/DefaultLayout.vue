@@ -1,35 +1,51 @@
 <template>
   <v-app>
     <!-- Barra superior -->
-    <v-app-bar app color="primary" dark>
-      <v-toolbar-title>Centro de Operaciones Capital</v-toolbar-title>
+    <v-app-bar app color="primary" dark elevation="4">
+      <v-toolbar-title class="text-uppercase font-weight-bold">
+        Centro de Operaciones Capital
+      </v-toolbar-title>
       <v-spacer />
-      <v-btn icon @click="logout" title="Cerrar sesión">
-        <v-icon>mdi-logout</v-icon>
-      </v-btn>
+      
+      <!-- Botón cerrar sesión -->
+      <v-tooltip text="Cerrar sesión">
+        <template #activator="{ props }">
+          <v-btn icon v-bind="props" @click="logout">
+            <v-icon>mdi-logout</v-icon>
+          </v-btn>
+        </template>
+      </v-tooltip>
     </v-app-bar>
 
     <!-- Menú lateral -->
-    <v-navigation-drawer app permanent>
-      <v-list dense nav>
+    <v-navigation-drawer app permanent width="260">
+      <v-list nav dense>
+        <v-list-subheader>Menú principal</v-list-subheader>
+
         <v-list-item to="/docs" router exact>
-          <v-icon left>mdi-file-document</v-icon>
+          <v-list-item-icon><v-icon>mdi-file-document</v-icon></v-list-item-icon>
           <v-list-item-title>Documentos</v-list-item-title>
         </v-list-item>
-        <!-- Agregá más ítems si querés -->
+
+        <!-- Podés agregar más rutas acá -->
+        <!--
+        <v-list-item to="/perfil" router>
+          <v-list-item-icon><v-icon>mdi-account</v-icon></v-list-item-icon>
+          <v-list-item-title>Perfil</v-list-item-title>
+        </v-list-item>
+        -->
       </v-list>
-      <v-list-item to="/perfil" router>
-      <v-icon left>mdi-account</v-icon>
-      <v-list-item-title>Perfil</v-list-item-title>
-      </v-list-item>
 
-      <v-list-item to="/reportes" router>
-      <v-icon left>mdi-chart-box</v-icon>
-      <v-list-item-title>Reportes</v-list-item-title>
+      <!-- Footer del menú (opcional) -->
+      <v-divider class="my-2" />
+      <v-list-item>
+        <v-list-item-subtitle class="text-caption">
+          Usuario: {{ nombreUsuario || 'Desconocido' }}
+        </v-list-item-subtitle>
       </v-list-item>
-     </v-navigation-drawer>
+    </v-navigation-drawer>
 
-    <!-- Contenido principal -->
+    <!-- Contenido -->
     <v-main>
       <v-container fluid>
         <router-view />
@@ -39,8 +55,11 @@
 </template>
 
 <script setup>
+import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+
 const router = useRouter()
+const nombreUsuario = ref(localStorage.getItem('nombre_usuario'))
 
 function logout() {
   localStorage.clear()
