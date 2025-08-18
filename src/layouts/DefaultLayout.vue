@@ -43,6 +43,7 @@
 
 <script setup>
 import { useRouter } from 'vue-router'
+import { useAuthStore } from '@/stores/authjs' // 🔥 IMPORTACIÓN NECESARIA
 
 const router = useRouter()
 const authStore = useAuthStore()
