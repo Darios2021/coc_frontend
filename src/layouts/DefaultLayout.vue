@@ -48,14 +48,18 @@ const router = useRouter()
 
 function logout() {
   console.log('Cerrando sesión...')
-  localStorage.clear()
-  sessionStorage.clear() // por si acaso
 
-  // resetear flags de auth del router
-  if (typeof window !== 'undefined') {
-    window.location.href = '/login'
-  }
+  // Borramos todas las cookies relacionadas (solo si se usó auth con cookies)
+  document.cookie = 'jwt=; Max-Age=0; path=/;'
+
+  // Limpiamos almacenamiento local
+  localStorage.clear()
+  sessionStorage.clear()
+
+  // Forzamos redirección dura
+  window.location.href = '/login'
 }
+
 
 
 </script>
