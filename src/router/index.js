@@ -54,14 +54,16 @@ async function ensureAuthOnce() {
 
 // Guard global
 router.beforeEach(async (to) => {
- const isAuthenticated = await ensureAuthOnce()
+  const isAuthenticated = await ensureAuthOnce()
 
-if (to.meta?.requiresAuth && !isAuthenticated) {
+  if (to.meta?.requiresAuth && !isAuthenticated) {
     return { name: 'login', query: { redirect: to.fullPath } }
   }
+
   if (to.name === 'login' && isAuthenticated) {
     return { name: 'docs' }
   }
 })
+
 
 export default router
