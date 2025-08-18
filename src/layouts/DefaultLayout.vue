@@ -49,6 +49,12 @@ const router = useRouter()
 function logout() {
   console.log('Cerrando sesión...')
   localStorage.clear()
- router.push({ name: 'login' })
+  sessionStorage.clear() // por si acaso
+
+  // resetear flags de auth del router
+  if (typeof window !== 'undefined') {
+    window.location.href = '/login'
+  }
 }
+
 </script>
