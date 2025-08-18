@@ -1,3 +1,4 @@
+<!-- src/layouts/DefaultLayout.vue -->
 <template>
   <v-app>
     <!-- Barra superior -->
@@ -6,14 +7,15 @@
         Centro de Operaciones Capital
       </v-toolbar-title>
       <v-spacer />
-      
+
       <!-- Botón cerrar sesión -->
-      <v-tooltip text="Cerrar sesión">
+      <v-tooltip location="bottom">
         <template #activator="{ props }">
-          <v-btn icon v-bind="props" @click="logout">
+          <v-btn icon v-bind="props" @click="logout" color="white" variant="text">
             <v-icon>mdi-logout</v-icon>
           </v-btn>
         </template>
+        <span>Cerrar sesión</span>
       </v-tooltip>
     </v-app-bar>
 
@@ -27,7 +29,7 @@
           <v-list-item-title>Documentos</v-list-item-title>
         </v-list-item>
 
-        <!-- Podés agregar más rutas acá -->
+        <!-- Agregá más rutas si querés -->
         <!--
         <v-list-item to="/perfil" router>
           <v-list-item-icon><v-icon>mdi-account</v-icon></v-list-item-icon>
@@ -36,7 +38,7 @@
         -->
       </v-list>
 
-      <!-- Footer del menú (opcional) -->
+      <!-- Footer menú -->
       <v-divider class="my-2" />
       <v-list-item>
         <v-list-item-subtitle class="text-caption">
