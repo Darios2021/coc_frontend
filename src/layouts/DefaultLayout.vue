@@ -43,7 +43,7 @@
 
 <script setup>
 import { useRouter } from 'vue-router'
-import { useAuthStore } from '@/stores/authjs' // 🔥 IMPORTACIÓN NECESARIA
+import { useAuthStore } from '@/stores/authjs.js'
 
 const router = useRouter()
 const authStore = useAuthStore()
@@ -51,6 +51,13 @@ const authStore = useAuthStore()
 async function handleLogout() {
   console.log('🔒 Cerrando sesión...')
   await authStore.logout()
+
+  // Limpiar almacenamiento y cookies (por si acaso)
+  localStorage.clear()
+  sessionStorage.clear()
+  document.cookie = 'jwt=; Max-Age=0; path=/;'
+
+  // Redireccionar a login
   router.push({ name: 'login' })
 }
 </script>
