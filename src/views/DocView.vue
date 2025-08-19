@@ -484,13 +484,13 @@ async function copySectionLink(id){ try{ const url = `${location.origin}${locati
 async function copySectionText(s){ try{ await navigator.clipboard.writeText(s?.content || ''); toast('Texto copiado')}catch{toast('No pude copiar')} }
 function toast(m){ snack.value={show:true,msg:m} }
 
-import * as pdfjsLib from 'pdfjs-dist'
 import { EventBus, PDFLinkService, PDFFindController, PDFViewer } from 'pdfjs-dist/web/pdf_viewer'
 import 'pdfjs-dist/web/pdf_viewer.css'
 
 // Vite: importá el worker mjs y asignalo como workerSrc
 import pdfjsWorker from 'pdfjs-dist/build/pdf.worker.mjs'
 pdfjsLib.GlobalWorkerOptions.workerSrc = pdfjsWorker
+
 
 
 
