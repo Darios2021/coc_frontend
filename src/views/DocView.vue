@@ -361,7 +361,7 @@ import { ref, reactive, computed, onMounted, onBeforeUnmount, nextTick, watch } 
 import { useRoute } from 'vue-router'
 
 const route = useRoute()
-const API = import.meta.env.VITE_API_URL
+import { apiUrl } from '@/lib/config'
 
 const role = ref(localStorage.getItem('role') || 'viewer')
 const canEdit = computed(() => ['admin','editor'].includes(role.value))
@@ -389,13 +389,13 @@ function toggleFav() {
 async function cargar() {
   loading.value = true; error.value = ''
   try {
-    const res = await fetch(`${API}/docs/${route.params.id}`)
+    const res = await fetch(apiUrl(`/docs/${route.params.id}`))
     if (!res.ok) throw new Error('HTTP ' + res.status)
     doc.value = await res.json()
 
     // relacionados
     try {
-      const rr = await fetch(`${API}/docs/${route.params.id}/related`)
+      const rr = await fetch(apiUrl(`/docs/${route.params.id}/related`))
       related.value = rr.ok ? await rr.json() : []
     } catch { related.value = [] }
 
@@ -492,11 +492,6 @@ import 'pdfjs-dist/web/pdf_viewer.css'
 // 👇 Worker correcto para Vite
 import PdfWorker from 'pdfjs-dist/build/pdf.worker.mjs?worker'
 pdfjsLib.GlobalWorkerOptions.workerPort = new PdfWorker()
-
-
-
-
-
 
 const pdfHost = ref(null)
 const viewerEl = ref(null)
@@ -673,7 +668,7 @@ async function copyShare(){ try{ await navigator.clipboard.writeText(share.value
 const versions = ref({ open:false, items:[] })
 async function preloadVersions(){
   try{
-    const r = await fetch(`${API}/docs/${route.params.id}/versions`)
+    const r = await fetch(apiUrl(`/docs/${route.params.id}/versions`))
     if(r.ok){ versions.value.items = await r.json(); return }
   }catch{}
   // fallback

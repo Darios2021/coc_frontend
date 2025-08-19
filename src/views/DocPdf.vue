@@ -288,7 +288,7 @@ import { useRoute } from 'vue-router'
 
 /* ------------ datos del doc ------------- */
 const route = useRoute()
-const API = import.meta.env.VITE_API_URL
+import { apiUrl } from '@/lib/config'
 
 const role = ref(localStorage.getItem('role') || 'viewer')
 const doc  = ref({ title: 'Documento', visibility: 'interno' })
@@ -336,7 +336,7 @@ const frameKey = ref('')
 const bust = ref(Date.now().toString())
 
 const fileUrl = computed(() => {
-  const u = new URL(`${API}/docs/${route.params.id}/file`)
+  const u = new URL(apiUrl(`/docs/${route.params.id}/file`))
   u.searchParams.set('v', bust.value)
   return u.toString()
 })

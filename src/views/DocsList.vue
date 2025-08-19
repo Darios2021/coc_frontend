@@ -218,8 +218,7 @@
 import { ref, computed, onMounted } from 'vue'
 import AdvancedSearch from '@/components/AdvancedSearch.vue'
 
-const API = import.meta.env.VITE_API_URL
-
+import { apiUrl } from '@/lib/config'
 // Rol (ejemplo demo)
 const role = ref(localStorage.getItem('role') || 'viewer')
 const canUpload = computed(() => ['admin', 'editor'].includes(role.value))
@@ -268,7 +267,7 @@ async function cargar() {
   loading.value = true
   error.value = ''
   try {
-    const url = new URL(`${API}/docs`)
+   const url = new URL(apiUrl('/docs'))
     // filtros
     if (filters.value.q) url.searchParams.set('q', filters.value.q)
     if (filters.value.classification) url.searchParams.set('classification', filters.value.classification)
