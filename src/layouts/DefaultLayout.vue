@@ -15,7 +15,7 @@
 
 <script setup>
 import { useRouter } from 'vue-router'
-import api from '../services/api'
+import api from '../lib/api'
 
 const router = useRouter()
 
