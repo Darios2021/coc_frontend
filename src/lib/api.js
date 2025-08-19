@@ -2,7 +2,7 @@ import axios from 'axios'
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_BASE,
-  withCredentials: true,             // MUY IMPORTANTE para cookies HttpOnly
+  withCredentials: true,   // MUY IMPORTANTE para cookies HttpOnly
   timeout: 30000,
 })
 

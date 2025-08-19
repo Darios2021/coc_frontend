@@ -13,7 +13,6 @@ import DefaultLayout from '../layouts/DefaultLayout.vue'
 const routes = [
   { path: '/', redirect: '/docs' },
   { path: '/login', name: 'login', component: Login, meta: { public: true } },
-
   {
     path: '/',
     component: DefaultLayout,
@@ -40,7 +39,7 @@ async function ensureAuthOnce() {
   try {
     const res = await fetch(`${import.meta.env.VITE_API_BASE}/auth/refresh`, {
       method: 'POST',
-      credentials: 'include'
+      credentials: 'include',
     })
     const ok = res.ok
     localStorage.setItem('auth', ok ? '1' : '0')
@@ -50,7 +49,6 @@ async function ensureAuthOnce() {
     return false
   }
 }
-
 
 // Guard global
 router.beforeEach(async (to) => {
@@ -64,6 +62,5 @@ router.beforeEach(async (to) => {
     return { name: 'docs' }
   }
 })
-
 
 export default router

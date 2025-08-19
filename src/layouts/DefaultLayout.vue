@@ -1,63 +1,35 @@
 <template>
-  <v-app>
-    <!-- Barra superior -->
-    <v-app-bar app color="primary" dark>
-      <v-toolbar-title>Centro de Operaciones Capital</v-toolbar-title>
+  <div class="layout-root">
+    <v-app-bar density="comfortable" flat>
+      <v-toolbar-title>COC · Centro de Operaciones Capital</v-toolbar-title>
       <v-spacer />
-
-      <!-- Botón de logout dentro de un menú desplegable -->
-      <v-menu offset-y>
-        <template #activator="{ props }">
-          <v-btn icon v-bind="props">
-            <v-icon>mdi-account-circle</v-icon>
-          </v-btn>
-        </template>
-
-        <v-list>
-          <v-list-item @click="handleLogout" link>
-            <v-list-item-icon><v-icon>mdi-logout</v-icon></v-list-item-icon>
-            <v-list-item-title>Cerrar sesión</v-list-item-title>
-          </v-list-item>
-        </v-list>
-      </v-menu>
+      <v-btn variant="text" @click="goDocs">Docs</v-btn>
+      <v-btn color="primary" @click="doLogout">Salir</v-btn>
     </v-app-bar>
 
-    <!-- Menú lateral -->
-    <v-navigation-drawer app permanent>
-      <v-list dense nav>
-        <v-list-item to="/docs" router exact>
-          <v-list-item-icon><v-icon>mdi-file-document</v-icon></v-list-item-icon>
-          <v-list-item-title>Documentos</v-list-item-title>
-        </v-list-item>
-      </v-list>
-    </v-navigation-drawer>
-
-    <!-- Contenido principal -->
     <v-main>
-      <v-container fluid>
-        <router-view />
-      </v-container>
+      <router-view />
     </v-main>
-  </v-app>
+  </div>
 </template>
 
 <script setup>
 import { useRouter } from 'vue-router'
-import { useAuthStore } from '@/stores/authjs.js'
+import api from '../services/api'
 
 const router = useRouter()
-const authStore = useAuthStore()
 
-async function handleLogout() {
-  console.log('🔒 Cerrando sesión...')
-  await authStore.logout()
+function goDocs() {
+  router.push({ name: 'docs' })
+}
 
-  // Limpiar almacenamiento y cookies (por si acaso)
-  localStorage.clear()
-  sessionStorage.clear()
-  document.cookie = 'jwt=; Max-Age=0; path=/;'
-
-  // Redireccionar a login
+async function doLogout() {
+  try { await api.post('/auth/logout') } catch {}
+  localStorage.setItem('auth', '0')
   router.push({ name: 'login' })
 }
 </script>
+
+<style scoped>
+.layout-root { min-height: 100vh; }
+</style>
