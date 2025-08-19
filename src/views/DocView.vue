@@ -484,20 +484,15 @@ async function copySectionLink(id){ try{ const url = `${location.origin}${locati
 async function copySectionText(s){ try{ await navigator.clipboard.writeText(s?.content || ''); toast('Texto copiado')}catch{toast('No pude copiar')} }
 function toast(m){ snack.value={show:true,msg:m} }
 
-// 👈 Este import es obligatorio, si no pdfjsLib no existe
 import * as pdfjsLib from 'pdfjs-dist'
-
-// 👇 Estos imports son válidos (no uses legacy)
 import { EventBus, PDFLinkService, PDFFindController, PDFViewer } 
-from 'pdfjs-dist/build/pdf.mjs'
+  from 'pdfjs-dist/web/pdf_viewer.mjs'
 import 'pdfjs-dist/web/pdf_viewer.css'
 
+// 👇 Worker correcto para Vite
+import PdfWorker from 'pdfjs-dist/build/pdf.worker.mjs?worker'
+pdfjsLib.GlobalWorkerOptions.workerPort = new PdfWorker()
 
-
-
-// 👇 Worker correcto en Vite
-import pdfjsWorker from 'pdfjs-dist/build/pdf.worker.mjs'
-pdfjsLib.GlobalWorkerOptions.workerSrc = pdfjsWorker
 
 
 
