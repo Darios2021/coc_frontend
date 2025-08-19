@@ -17,6 +17,7 @@
 import { useRouter } from 'vue-router'
 import api from '../lib/api'
 
+
 const router = useRouter()
 
 function goDocs() {
