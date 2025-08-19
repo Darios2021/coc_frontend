@@ -48,7 +48,7 @@
 <script setup>
 import { ref } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-import api from '../services/api' // ruta relativa segura
+import api from '@/lib/api'
 
 const router = useRouter()
 const route = useRoute()
