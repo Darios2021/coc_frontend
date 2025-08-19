@@ -489,8 +489,9 @@ import * as pdfjsLib from 'pdfjs-dist'
 
 // 👇 Estos imports son válidos (no uses legacy)
 import { EventBus, PDFLinkService, PDFFindController, PDFViewer } 
-from 'pdfjs-dist/web/pdf_viewer.js'
+from 'pdfjs-dist/build/pdf.mjs'
 import 'pdfjs-dist/web/pdf_viewer.css'
+
 
 
 
