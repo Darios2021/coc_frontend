@@ -488,8 +488,10 @@ function toast(m){ snack.value={show:true,msg:m} }
 import * as pdfjsLib from 'pdfjs-dist'
 
 // 👇 Estos imports son válidos (no uses legacy)
-import { EventBus, PDFLinkService, PDFFindController, PDFViewer } from 'pdfjs-dist/legacy/web/pdf_viewer.js'
-import 'pdfjs-dist/legacy/web/pdf_viewer.css'
+import { EventBus, PDFLinkService, PDFFindController, PDFViewer } 
+from 'pdfjs-dist/web/pdf_viewer.js'
+import 'pdfjs-dist/web/pdf_viewer.css'
+
 
 
 // 👇 Worker correcto en Vite
