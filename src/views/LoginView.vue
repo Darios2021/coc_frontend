@@ -1,5 +1,5 @@
 <template>
-  <div class="coc-login-root">
+  <v-main class="d-flex align-center justify-center coc-login-root">
     <v-card class="login-card" elevation="8">
       <div class="brand">
         <h2>COC</h2>
@@ -42,7 +42,7 @@
         </v-btn>
       </v-form>
     </v-card>
-  </div>
+  </v-main>
 </template>
 
 <script setup>
@@ -71,7 +71,7 @@ async function onSubmit() {
       password: password.value,
       totp: totp.value || null,
     })
-    // Refresca para fijar cookies y marcar auth
+    // Refresca cookies y marca auth
     const res = await fetch(`${import.meta.env.VITE_API_BASE}/auth/refresh`, {
       method: 'POST',
       credentials: 'include',
@@ -91,8 +91,6 @@ async function onSubmit() {
 <style scoped>
 .coc-login-root {
   min-height: 100vh;
-  display: grid;
-  place-items: center;
   padding: 24px;
 }
 .login-card {

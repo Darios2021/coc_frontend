@@ -1,8 +1,9 @@
-<!-- src/App.vue -->
 <template>
-  <router-view />
+  <v-app>
+    <router-view />
+  </v-app>
 </template>
 
 <script setup>
-// vacío
+// nada acá
 </script>

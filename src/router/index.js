@@ -7,12 +7,14 @@ const DocsList = () => import('../views/DocsList.vue')
 const DocView  = () => import('../views/DocView.vue')
 const DocPdf   = () => import('../views/DocPdf.vue')
 
-// Layout
+// Layout (¡sin <v-app> adentro!)
 import DefaultLayout from '../layouts/DefaultLayout.vue'
 
 const routes = [
   { path: '/', redirect: '/docs' },
+
   { path: '/login', name: 'login', component: Login, meta: { public: true } },
+
   {
     path: '/',
     component: DefaultLayout,
@@ -30,9 +32,8 @@ const router = createRouter({
   routes,
 })
 
-// ===== Auth bootstrap =====
+// ===== Auth bootstrap (run-once) =====
 let bootstrapped = false
-
 async function ensureAuthOnce() {
   if (bootstrapped) return localStorage.getItem('auth') === '1'
   bootstrapped = true
@@ -50,17 +51,24 @@ async function ensureAuthOnce() {
   }
 }
 
-// Guard global
+// ===== Global guard =====
 router.beforeEach(async (to) => {
-  const isAuthenticated = await ensureAuthOnce()
+  // Solo chequeamos auth si hace falta
+  if (to.meta?.requiresAuth || to.name === 'login') {
+    const isAuthenticated = await ensureAuthOnce()
 
-  if (to.meta?.requiresAuth && !isAuthenticated) {
-    return { name: 'login', query: { redirect: to.fullPath } }
+    // Si pide auth y no está logeado → al login
+    if (to.meta?.requiresAuth && !isAuthenticated) {
+      return { name: 'login', query: { redirect: to.fullPath } }
+    }
+
+    // Si va al login pero ya está logeado → a docs
+    if (to.name === 'login' && isAuthenticated) {
+      return { name: 'docs' }
+    }
   }
 
-  if (to.name === 'login' && isAuthenticated) {
-    return { name: 'docs' }
-  }
+  return true
 })
 
 export default router
